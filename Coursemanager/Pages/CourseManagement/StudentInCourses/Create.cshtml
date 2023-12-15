@@ -1,0 +1,99 @@
+﻿@page
+@model CourseManager.Pages.CourseManagement.StudentInCourses.CreateModel
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h1>Add</h1>
+
+<h4>@Model.Course.Name</h4>
+<hr />
+<div class="row">
+    <form class="d-flex" asp-page="Create" method="get">
+        <input class="form-control me-sm-2" type="search" placeholder="Search" asp-for="@Model.SearchString">
+        <input type="hidden" name="courseId" value="@Model.Course.Id" />
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</div>
+<div class="row">
+    <div class="col-md-11">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="StudentInCourse.CourseId" type="hidden" value="@Model.Course.Id" />
+            <div class="form-group">
+                <table class="table">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th>
+                                @Html.DisplayNameFor(model => model.Students[0].Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Students[0].Code)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Students[0].Email)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Students[0].Address)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Students[0].EnrollDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Students[0].Major)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Students[0].Status)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Students != null)
+                        {
+                            foreach (var item in Model.Students)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Address)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EnrollDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Major.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td>
+                                        <input asp-for="StudentInCourse.StudentId" type="hidden" value="@item.Id" />
+                                        <input class="btn btn-primary" type="submit" value="Add">
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index" asp-route-courseId="@Model.Course.Id">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,86 @@
+﻿@page
+@model CourseManager.Pages.Semesters.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    var page = Model.Pagination;
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New +</a>
+    <form class="d-flex" asp-page="Index" method="get">
+        <input class="form-control me-sm-2" type="search" placeholder="Search" asp-for="@Model.SearchString">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</p>
+<table class="table">
+    <thead>
+        <tr class="table-secondary">
+            <th>
+                @Html.DisplayNameFor(model => model.Semester[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Semester[0].StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Semester[0].EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Semester[0].Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Semester) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                            <a class="dropdown-item" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="dropdown-item" asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                            <a class="dropdown-item" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                        </div>
+                    </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@if (page.TotalItemsCount > 3)
+{
+    <div>
+        <ul class="pagination">
+            @if (page.Previous)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="Index" asp-route-index="@(page.PageIndex-1)">&laquo;</a>
+                </li>
+            }
+            <li class="page-item">
+                <p class="page-link">@(page.PageIndex + 1) of @(page.TotalPagesCount)</p>
+            </li>
+            @if (page.Next)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="Index" asp-route-index="@(page.PageIndex+1)">&raquo;</a>
+                </li>
+            }
+        </ul>
+    </div>
+}

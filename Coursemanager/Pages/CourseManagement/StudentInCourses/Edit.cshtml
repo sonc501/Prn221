@@ -1,0 +1,47 @@
+﻿@page
+@model CourseManager.Pages.CourseManagement.StudentInCourses.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>StudentInCourse</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="StudentInCourse.CourseId" class="control-label"></label>
+                <input class="form-control" disabled="@(true)" placeholder="@Model.StudentInCourse.Course.Name" />
+                <span asp-validation-for="StudentInCourse.CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudentInCourse.StudentId" class="control-label"></label>
+                <input class="form-control" disabled="@(true)" placeholder="@Model.StudentInCourse.Student.Name"/>
+                <span asp-validation-for="StudentInCourse.StudentId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="StudentInCourse.Id" />
+            <input type="hidden" asp-for="StudentInCourse.CourseId" />
+            <input type="hidden" asp-for="StudentInCourse.StudentId" />
+            <div class="form-group">
+                <label asp-for="StudentInCourse.Status" class="control-label"></label>
+                <select asp-for="StudentInCourse.Status" class="form-select" asp-items="Html.GetEnumSelectList<BaseStatus>()"></select>
+                <span asp-validation-for="StudentInCourse.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index" asp-route-courseId="@Model.StudentInCourse.CourseId">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

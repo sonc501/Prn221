@@ -1,0 +1,100 @@
+﻿@page
+@model CourseManager.Pages.Sessions.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    var page = Model.Pagination;
+    var isAdmin = ((System.Security.Claims.ClaimsIdentity)User.Identity!).HasClaim(System.Security.Claims.ClaimTypes.Role, "Admin");
+}
+
+<h1>@Model.Course.Name | <a class="link-info" asp-page="/CourseManagement/Courses/Details" asp-route-id="@Model.Course.Id">Details</a></h1>
+
+<p>
+    @if (isAdmin)
+    {
+        <a asp-page="Create" class="btn btn-primary" asp-route-courseId="@Model.Course.Id">Create New +</a>
+    }
+    <form class="d-flex" asp-page="Index" method="get">
+        <input class="form-control me-sm-2" type="search" placeholder="Search" asp-for="@Model.SearchString">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</p>
+<table class="table">
+    <thead>
+        <tr class="table-secondary">
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].Course)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].Room)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Session) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Room.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                            <a class="dropdown-item" asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                            @if (isAdmin)
+                            {
+                                <a class="dropdown-item" asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="dropdown-item" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                            }
+                            <a class="dropdown-item" asp-page="/CourseManagement/Attendances/Index" asp-route-sessionId="@item.Id">View session's attendances</a>
+                        </div>
+                    </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@if (page.TotalItemsCount > 3)
+{
+    <div>
+        <ul class="pagination">
+            @if (page.Previous)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="Index" asp-route-courseId="@Model.Course.Id" asp-route-index="@(page.PageIndex-1)">&laquo;</a>
+                </li>
+            }
+            <li class="page-item">
+                <p class="page-link">@(page.PageIndex + 1) of @(page.TotalPagesCount)</p>
+            </li>
+            @if (page.Next)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-page="Index" asp-route-courseId="@Model.Course.Id" asp-route-index="@(page.PageIndex+1)">&raquo;</a>
+                </li>
+            }
+        </ul>
+    </div>
+}
